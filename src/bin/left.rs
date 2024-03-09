@@ -35,7 +35,7 @@ mod app {
 
         // Setup LED
         let port0 = hal::gpio::p0::Parts::new(cx.device.P0);
-        let led = port0.p0_06.into_push_pull_output(Level::Low).degrade();
+        let led = port0.p0_15.into_push_pull_output(Level::Low).degrade();
 
         // Schedule the blinking task
         blink::spawn().ok();
