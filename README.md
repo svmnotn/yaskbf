@@ -2,13 +2,31 @@
 
 ## Dependencies
 
+#### 0. Setup cross compilation
+
+```console
+rustup target add thumbv7em-none-eabihf
+```
+
 #### 1. `cargo objcopy`:
 
 ```console
 rustup component add llvm-tools-preview
 ```
 
-#### 2. `uf2conv`:
+#### 2. `flip-link`:
+
+```console
+cargo install flip-link
+```
+
+#### 3. `probe-rs`:
+
+```console
+cargo install probe-rs --features cli
+```
+
+#### 4. `uf2conv`:
 
 ```console
 cargo install cargo-binutils uf2conv
