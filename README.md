@@ -45,7 +45,7 @@ cargo br
 ```
 followed by
 ```console
-uf2conv right.bin --base 0x26000 --family 0xADA52840 --output right.uf2
+uf2conv right.bin --base 0x27000 --family 0xADA52840 --output right.uf2
 ```
 
 ### For the left side
@@ -54,7 +54,7 @@ cargo bl
 ```
 followed by
 ```console
-uf2conv left.bin --base 0x26000 --family 0xADA52840 --output left.uf2
+uf2conv left.bin --base 0x27000 --family 0xADA52840 --output left.uf2
 ```
 
 then copy the firmware for the connected side onto the nice!nano drive, it will disconnect and reboot once written.

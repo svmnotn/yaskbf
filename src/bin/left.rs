@@ -1,68 +1,31 @@
-#![deny(unsafe_code)]
-#![deny(warnings)]
-#![no_main]
 #![no_std]
+#![no_main]
 
-use yaskbf::hal;
+// use defmt::*;
+use yaskbf::BLINK_PERIOD;
+use embassy_executor::Spawner;
+use embassy_nrf::{gpio::{Level, Output, OutputDrive}, interrupt::Priority};
+use embassy_time::{Duration, Timer};
+use {defmt_rtt as _, panic_probe as _}; // global logger
+use nrf_softdevice as _;
 
-#[rtic::app(device = hal::pac, dispatchers = [SWI0_EGU0])]
-mod app {
-    use super::*;
-
-    use hal::gpio::{Level, Output, Pin, PushPull};
-    use hal::prelude::*;
-
-    use rtic_monotonics::nrf::rtc::Rtc0 as Mono;
-    use rtic_monotonics::nrf::rtc::*;
-    use rtic_monotonics::Monotonic;
-
-    #[shared]
-    struct Shared {}
-
-    #[local]
-    struct Local {
-        led: Pin<Output<PushPull>>,
+#[embassy_executor::task]
+async fn blinker(mut led: Output<'static, embassy_nrf::peripherals::P0_15>, interval: Duration) {
+    loop {
+        led.set_high();
+        Timer::after(interval).await;
+        led.set_low();
+        Timer::after(interval).await;
     }
+}
 
-    #[init]
-    fn init(cx: init::Context) -> (Shared, Local) {
-        // Configure low frequency clock
-        hal::clocks::Clocks::new(cx.device.CLOCK).start_lfclk();
+#[embassy_executor::main]
+async fn main(spawner: Spawner) {
+    let mut config = embassy_nrf::config::Config::default();
+    config.gpiote_interrupt_priority = Priority::P2;
+    config.time_interrupt_priority = Priority::P2;
+    let p = embassy_nrf::init(config);
 
-        // Initialize Monotonic
-        let token = rtic_monotonics::create_nrf_rtc0_monotonic_token!();
-        Mono::start(cx.device.RTC0, token);
-
-        // Setup LED
-        let port0 = hal::gpio::p0::Parts::new(cx.device.P0);
-        let led = port0.p0_15.into_push_pull_output(Level::Low).degrade();
-
-        // Schedule the blinking task
-        blink::spawn().ok();
-
-        (Shared {}, Local { led })
-    }
-
-    #[task(local = [led])]
-    async fn blink(cx: blink::Context) {
-        let blink::LocalResources { led, .. } = cx.local;
-
-        let mut next_tick = Mono::now();
-        let mut blink_on = false;
-        loop {
-            let now = Mono::now();
-            let now_ms: fugit::SecsDurationU64 = now.duration_since_epoch().convert();
-            defmt::println!("Timer {} ({})", now_ms, now.ticks());
-
-            blink_on = !blink_on;
-            if blink_on {
-                led.set_high().unwrap();
-            } else {
-                led.set_low().unwrap();
-            }
-
-            next_tick += 1000.millis();
-            Mono::delay_until(next_tick).await;
-        }
-    }
+    let led = Output::new(p.P0_15, Level::High, OutputDrive::Standard);
+    let _ = spawner.spawn(blinker(led, BLINK_PERIOD));
 }
