@@ -6,43 +6,44 @@ version = "0.1.0"
 build = "build.rs"
 
 [dependencies]
-defmt = "0.3"
-defmt-rtt = "0.4"
-panic-probe = { version = "0.3", features = ["print-defmt"] }
 embassy-executor = { version = "0.5", features = [
+    "nightly",
     "arch-cortex-m",
     "executor-thread",
     "executor-interrupt",
-    "defmt",
+    "log",
     "integrated-timers",
 ] }
 embassy-nrf = { version = "0.1", features = [
-    "defmt",
+    "log",
     "nrf52840",
     "gpiote",
     "time",
+    "nfc-pins-as-gpio",
     "time-driver-rtc1",
 ] }
-embassy-time = { version = "0.3", features = [
-    "defmt",
-    "defmt-timestamp-uptime",
-] }
-embassy-usb = { version = "0.1", features = ["defmt"] }
-embassy-sync = { version = "0.5", features = ["defmt"] }
-cortex-m = "0.7.7"
-cortex-m-rt = "0.7.3"
+embassy-time = { version = "0.3", features = ["log"] }
+embassy-usb = { version = "0.1", features = ["log"] }
+embassy-usb-logger = { version = "0.1" }
+embassy-sync = { version = "0.5", features = ["log"] }
 nrf-softdevice = { version = "0.1", features = [
-    "defmt",
+    "log",
     "nrf52840",
     "s140",
     "critical-section-impl",
     "ble-rssi",
+    "ble-gatt-server",
+    "ble-gatt-client",
     "ble-peripheral",
     "ble-central",
     "ble-sec",
     "evt-max-size-512",
 ] }
-nrf-softdevice-s140 = { version = "0.1" }
+embassy-boot-nrf = { version = "0.2", features = ["softdevice"]}
+cortex-m = "0.7"
+cortex-m-rt = "0.7"
+panic-probe = "0.3"
+log = "0.4"
 
 # cargo build/run
 [profile.dev]
