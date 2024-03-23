@@ -1,6 +1,7 @@
 #![no_std]
 #![no_main]
 #![feature(type_alias_impl_trait)]
+#![feature(impl_trait_in_assoc_type)]
 #![macro_use]
 pub use nrf_softdevice::__cortex_m_rt_SWI2_EGU2_trampoline;
 pub use panic_probe::hard_fault;

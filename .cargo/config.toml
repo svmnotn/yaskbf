@@ -18,3 +18,6 @@ br = "objcopy --bin right -- -O binary right.bin"
 bl = "objcopy --bin left -- -O binary left.bin"
 brr = "objcopy --bin right --release -- -O binary right.bin"
 brl = "objcopy --bin left --release -- -O binary left.bin"
+
+[env]
+DEFMT_LOG = "info"
