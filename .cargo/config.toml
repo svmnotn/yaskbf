@@ -20,4 +20,4 @@ brr = "objcopy --bin right --release -- -O binary right.bin"
 brl = "objcopy --bin left --release -- -O binary left.bin"
 
 [env]
-DEFMT_LOG = "info"
+DEFMT_LOG = "trace,sharp_memory_display=off"

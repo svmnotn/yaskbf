@@ -8,11 +8,14 @@ build = "build.rs"
 [dependencies]
 cortex-m = "0.7"
 cortex-m-rt = "0.7"
-panic-probe = "0.3"
+panic-probe = {version = "0.3", features = ["print-defmt"]}
 defmt = "0.3.6"
 defmt-rtt = "0.4.0"
 static_cell = "2"
 once_cell = { version = "1.19.0", features = ["atomic-polyfill"], default-features = false }
+
+sharp-memory-display = { version = "0.3", default-features = false, features = ["ls011b7dh03"] }
+embedded-graphics-core = "0.3"
 
 [dependencies.nrf-softdevice]
 version = "*"
@@ -22,13 +25,11 @@ features = [
     "nrf52840",
     "s140",
     "critical-section-impl",
-    "ble-rssi",
     "ble-gatt-server",
     "ble-gatt-client",
     "ble-peripheral",
     "ble-central",
     "ble-sec",
-    "evt-max-size-512",
 ]
 
 [dependencies.embassy-executor]
@@ -36,10 +37,9 @@ version = "*"
 git = "https://github.com/embassy-rs/embassy"
 features = [
     "nightly",
+    "defmt",
     "arch-cortex-m",
     "executor-thread",
-    "executor-interrupt",
-    "defmt",
     "integrated-timers",
 ]
 
@@ -50,7 +50,6 @@ features = [
     "defmt",
     "nrf52840",
     "gpiote",
-    "time",
     "nfc-pins-as-gpio",
     "time-driver-rtc1",
 ]
@@ -58,22 +57,22 @@ features = [
 [dependencies.embassy-time]
 version = "*"
 git = "https://github.com/embassy-rs/embassy"
-features = ["defmt"]
+features = ["defmt", "defmt-timestamp-uptime"]
 
 [dependencies.embassy-usb]
 version = "*"
 git = "https://github.com/embassy-rs/embassy"
-features = ["defmt"]
+# features = ["defmt"]
 
-[dependencies.embassy-sync]
-version = "*"
-git = "https://github.com/embassy-rs/embassy"
-features = ["defmt"]
+# [dependencies.embassy-sync]
+# version = "*"
+# git = "https://github.com/embassy-rs/embassy"
+# features = ["defmt"]
 
-[dependencies.embassy-boot-nrf]
-version = "*"
-git = "https://github.com/embassy-rs/embassy"
-features = ["softdevice"]
+# [dependencies.embassy-boot-nrf]
+# version = "*"
+# git = "https://github.com/embassy-rs/embassy"
+# features = ["softdevice"]
 
 # cargo build/run
 [profile.dev]
