@@ -37,8 +37,6 @@ async fn main(spawner: Spawner) {
     let p = init_peripherals();
     unwrap!(spawner.spawn(heartbeat(p.P0_15.degrade())));
     info!("Spawned Heartbeat");
-    unwrap!(spawner.spawn(usb()));
-    info!("Spawned USB Task");
     unwrap!(spawner.spawn(joystick(
         p.SAADC.into_ref(),
         p.P0_29.degrade_saadc(),
@@ -54,6 +52,8 @@ async fn main(spawner: Spawner) {
         p.P0_09.degrade(),
     )));
     info!("Spawned Display Task");
+    unwrap!(spawner.spawn(usb()));
+    info!("Spawned USB Task");
 
     loop {
         Timer::after_secs(10).await;

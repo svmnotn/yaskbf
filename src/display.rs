@@ -53,11 +53,13 @@ pub async fn display(
         if x_progress == 0 {
             y_progress += 1;
             y_progress %= size.height;
+            if y_progress == 0 {
+                disp.clear();
+            }
         }
 
         disp.flush_buffer();
         disp.display_mode();
-        Timer::after_millis(100).await;
-        disp.clear();
+        Timer::after_millis(10).await;
     }
 }
