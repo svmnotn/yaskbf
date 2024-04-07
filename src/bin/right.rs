@@ -36,14 +36,14 @@ async fn softdevice_task(sd: &'static Softdevice) -> ! {
 async fn main(spawner: Spawner) {
     let p = init_peripherals();
     unwrap!(spawner.spawn(heartbeat(p.P0_15.degrade())));
-    info!("Spawned Heartbeat");
     unwrap!(spawner.spawn(joystick(
         p.SAADC.into_ref(),
         p.P0_29.degrade_saadc(),
         p.P0_31.degrade_saadc(),
         p.P1_15.degrade()
     )));
-    info!("Spawned Joystick Task");
+    // Wait for the joystick to properly initialize before starting the other tasks
+    Timer::after_secs(1).await;
     unwrap!(spawner.spawn(display(
         p.SPI3.into_ref(),
         p.P1_02.degrade(),
@@ -51,9 +51,7 @@ async fn main(spawner: Spawner) {
         p.P1_07.degrade(),
         p.P0_09.degrade(),
     )));
-    info!("Spawned Display Task");
     unwrap!(spawner.spawn(usb("right")));
-    info!("Spawned USB Task");
 
     loop {
         Timer::after_secs(10).await;

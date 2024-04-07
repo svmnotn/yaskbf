@@ -60,6 +60,6 @@ pub async fn display(
 
         disp.flush_buffer();
         disp.display_mode();
-        Timer::after_ticks(1).await;
+        Timer::after_millis(1).await;
     }
 }

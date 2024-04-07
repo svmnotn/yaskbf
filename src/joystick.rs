@@ -71,6 +71,5 @@ pub async fn joystick(
             saadc.calibrate().await;
             info!("x: {=i16}, y: {=i16}, btn: {=bool}", x, y, pressed.is_low());
         }
-        Timer::after_micros(1).await;
     }
 }
