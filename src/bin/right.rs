@@ -52,7 +52,7 @@ async fn main(spawner: Spawner) {
         p.P0_09.degrade(),
     )));
     info!("Spawned Display Task");
-    unwrap!(spawner.spawn(usb()));
+    unwrap!(spawner.spawn(usb("right")));
     info!("Spawned USB Task");
 
     loop {

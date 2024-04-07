@@ -17,6 +17,7 @@ use static_cell::StaticCell;
 pub static VBUS_DETECT: OnceCell<SoftwareVbusDetect> = OnceCell::new();
 
 fn get_usb_driver(
+    serial: &'static str,
 ) -> embassy_usb::Builder<'static, Driver<'static, peripherals::USBD, impl VbusDetect>> {
     info!("setup usb driver");
     let usb_driver = {
@@ -42,7 +43,7 @@ fn get_usb_driver(
     let mut config = Config::new(0x4242, 0x6942);
     config.manufacturer.replace("svmnotn");
     config.product.replace("yaskbf");
-    config.serial_number.replace("right-1");
+    config.serial_number.replace(serial);
     config.max_power = 100;
 
     static DEVICE_DESCRIPTOR: StaticCell<[u8; 256]> = StaticCell::new();
@@ -65,8 +66,8 @@ fn get_usb_driver(
 }
 
 #[task]
-pub async fn usb() -> ! {
-    let b = get_usb_driver();
+pub async fn usb(serial: &'static str,) -> ! {
+    let b = get_usb_driver(serial);
     let mut b = b.build();
     b.run().await
 }
