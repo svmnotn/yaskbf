@@ -56,7 +56,6 @@ pub async fn joystick(
 
     let mut oldest_sample = 0;
     loop {
-        // disp.clear();
         let mut buf = [0; 2];
         saadc.sample(&mut buf).await;
         samples_x[oldest_sample] = buf[0] - offset_x;
@@ -72,5 +71,6 @@ pub async fn joystick(
             saadc.calibrate().await;
             info!("x: {=i16}, y: {=i16}, btn: {=bool}", x, y, pressed.is_low());
         }
+        Timer::after_micros(1).await;
     }
 }

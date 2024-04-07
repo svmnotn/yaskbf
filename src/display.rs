@@ -38,7 +38,7 @@ pub async fn display(
     info!("Display has dims w: {} h: {}", size.width, size.height);
 
     let mut x_progress = 0;
-    let mut y_progress = 1;
+    let mut y_progress = 0;
     loop {
         unsafe {
             for x in 0..x_progress {
@@ -60,6 +60,6 @@ pub async fn display(
 
         disp.flush_buffer();
         disp.display_mode();
-        Timer::after_millis(1).await;
+        Timer::after_ticks(1).await;
     }
 }
