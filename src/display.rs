@@ -49,10 +49,10 @@ pub async fn display(
         }
 
         x_progress += 1;
-        x_progress %= size.width;
+        x_progress %= size.width + 1;
         if x_progress == 0 {
             y_progress += 1;
-            y_progress %= size.height;
+            y_progress %= size.height + 1;
             if y_progress == 0 {
                 disp.clear();
             }
